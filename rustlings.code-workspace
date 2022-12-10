@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"emeraldwalk.runonsave": {
+		},
+		"workbench.colorTheme": "Default High Contrast"
+	}
+}
