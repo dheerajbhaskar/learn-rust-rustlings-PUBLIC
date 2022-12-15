@@ -7,6 +7,7 @@
 	"settings": {
 		"emeraldwalk.runonsave": {
 		},
-		"workbench.colorTheme": "Default High Contrast"
+		"workbench.colorTheme": "Default High Contrast",
+		"terminal.integrated.defaultProfile.windows": "Windows PowerShell"
 	}
 }
