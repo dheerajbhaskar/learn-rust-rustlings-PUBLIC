@@ -6,7 +6,12 @@
         {
             "label": "rustlings watch",
             "type": "shell",
-            "command": "rustlings watch"
+            "command": "rustlings watch",
+            "options": {
+                "env": {
+                    "RUST_BACKTRACE":"1",
+                }
+            }
         }
     ]
 }
