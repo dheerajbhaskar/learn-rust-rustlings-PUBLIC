@@ -4,7 +4,7 @@
 // Make the code compile and the tests pass!
 // Execute `rustlings hint structs3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+// !I AM NOT DONE
 
 #[derive(Debug)]
 struct Package {
@@ -40,11 +40,12 @@ mod tests {
     use super::*;
 
     #[test]
-    // #[should_panic]
+    #[should_panic]
     fn fail_creating_weightless_package() {
         let sender_country = String::from("Spain");
         let recipient_country = String::from("Austria");
 
+        //DONE: why is it panicing? Took me sometime to realize that panic was built into Panic::new
         Package::new(sender_country, recipient_country, -2210);
     }
 
