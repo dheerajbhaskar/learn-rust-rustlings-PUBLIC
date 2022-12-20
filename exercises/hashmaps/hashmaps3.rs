@@ -48,27 +48,50 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
     // The name of the team is the key and its associated struct is the value.
     let mut scores: HashMap<String, Team> = HashMap::new();
 
-    for r in results.lines() {
-        let v: Vec<&str> = r.split(',').collect();
-        let team_1_name = v[0].to_string();
-        let team_1_score: u8 = v[2].parse().unwrap();
-        let team_2_name = v[1].to_string();
-        let team_2_score: u8 = v[3].parse().unwrap();
-        // TODO: Populate the scores table with details extracted from the
-        // current line. Keep in mind that goals scored by team_1
-        // will be number of goals conceded from team_2, and similarly
-        // goals scored by team_2 will be the number of goals conceded by
-        // team_1.
+    // for r in results.lines() {
+    //     let v: Vec<&str> = r.split(',').collect();
+    //     let team_1_name = v[0].to_string();
+    //     let team_1_score: u8 = v[2].parse().unwrap();
+    //     let team_2_name = v[1].to_string();
+    //     let team_2_score: u8 = v[3].parse().unwrap();
+    //     // TODO: Populate the scores table with details extracted from the
+    //     // current line. Keep in mind that goals scored by team_1
+    //     // will be number of goals conceded from team_2, and similarly
+    //     // goals scored by team_2 will be the number of goals conceded by
+    //     // team_1.
 
-        // update team 1 score
-        update_team_scores(&mut scores, &team_1_name, team_1_score, team_2_score);
+    //     // update team 1 score
+    //     update_team_scores(&mut scores, &team_1_name, team_1_score, team_2_score);
         
-        // update team 2 score
-        update_team_scores(&mut scores, &team_2_name, team_2_score, team_1_score);
+    //     // update team 2 score
+    //     update_team_scores(&mut scores, &team_2_name, team_2_score, team_1_score);
         
-    }
+    // }
 
-    //TODO the above in a functional manner
+    //dheeraj BONUS TODO the above in a functional manner
+    results.lines()
+    .into_iter()
+    //dheeraj:TIL flatmaps
+    .flat_map(|result| {
+        let result:Vec<&str> = result.split(",").collect();
+        let (team1_score, team2_score) = (result[2].parse::<u8>().unwrap(), result[3].parse::<u8>().unwrap());
+        [
+            Team {
+                name: result[0].to_string(),
+                goals_scored: team1_score,
+                goals_conceded: team2_score,
+            },
+            Team {
+                name: result[1].to_string(),
+                goals_scored: team2_score,
+                goals_conceded: team1_score,
+            }
+        ]
+    })
+    .for_each(|team| update_team_scores(&mut scores, &team.name, team.goals_scored, team.goals_conceded)); // one way to do it
+
+    //dheeraj: THINK which implementation would you prefer imperative vs functional. I'm unsure. I'm leaning towards imperative due to familiarity.
+
     scores
 }
 
