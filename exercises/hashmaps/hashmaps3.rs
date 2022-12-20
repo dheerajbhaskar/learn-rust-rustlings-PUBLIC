@@ -25,6 +25,25 @@ struct Team {
     goals_conceded: u8,
 }
 
+//dheeraj: so this is how you show the type of &mut
+fn update_team_scores(scores: &mut HashMap<String, Team>, team_name:&str, goals_scored:u8, goals_conceded:u8){
+    match scores.contains_key(team_name){
+        true => {
+            let mut team = scores.get_mut(team_name).unwrap();
+            team.goals_scored+=goals_scored;
+            team.goals_conceded+=goals_conceded;
+        },
+        false => {
+            scores.insert(team_name.to_string(), 
+            Team {     
+                name: team_name.to_string(), 
+                goals_scored, 
+                goals_conceded,
+        });
+    },
+    }
+}
+
 fn build_scores_table(results: String) -> HashMap<String, Team> {
     // The name of the team is the key and its associated struct is the value.
     let mut scores: HashMap<String, Team> = HashMap::new();
@@ -40,7 +59,16 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
         // will be number of goals conceded from team_2, and similarly
         // goals scored by team_2 will be the number of goals conceded by
         // team_1.
+
+        // update team 1 score
+        update_team_scores(&mut scores, &team_1_name, team_1_score, team_2_score);
+        
+        // update team 2 score
+        update_team_scores(&mut scores, &team_2_name, team_2_score, team_1_score);
+        
     }
+
+    //TODO the above in a functional manner
     scores
 }
 
