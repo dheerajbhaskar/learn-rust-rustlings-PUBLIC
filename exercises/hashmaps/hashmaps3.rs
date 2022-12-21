@@ -68,7 +68,7 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
         
     // }
 
-    //dheeraj BONUS TODO the above in a functional manner
+    // //dheeraj BONUS TODO the above in a functional manner
     results.lines()
     .into_iter()
     //dheeraj:TIL flatmaps
@@ -88,9 +88,58 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
             }
         ]
     })
-    .for_each(|team| update_team_scores(&mut scores, &team.name, team.goals_scored, team.goals_conceded)); // one way to do it
+    // .for_each(|team| update_team_scores(&mut scores, &team.name, team.goals_scored, team.goals_conceded)); // one way to do it
+    .for_each(|team_from_iter| {
+        scores.entry(team_from_iter.name.to_string())
+        .and_modify(|team| Team {
+            name: team.name.to_string(),
+            goals_scored: team.goals_scored+team_from_iter.goals_scored,
+            goals_conceded: team.goals_conceded+team_from_iter.goals_conceded,
+        })
+        .or_insert(team_from_iter);
+    }); // 2nd way
 
     //dheeraj: THINK which implementation would you prefer imperative vs functional. I'm unsure. I'm leaning towards imperative due to familiarity.
+
+    //Wow! looks like this was supposed to be a simple task, and I blew up the loc
+    // for r in results.lines() {
+    //     let v: Vec<&str> = r.split(',').collect();
+    //     let team_1_name = v[0].to_string();
+    //     let team_1_score: u8 = v[2].parse().unwrap();
+    //     let team_2_name = v[1].to_string();
+    //     let team_2_score: u8 = v[3].parse().unwrap();
+    //     // TODO: Populate the scores table with details extracted from the
+    //     // current line. Keep in mind that goals scored by team_1
+    //     // will be number of goals conceded from team_2, and similarly
+    //     // goals scored by team_2 will be the number of goals conceded by
+    //     // team_1.
+        
+    //     //dheeraj: TIL entry modify or insert syntax
+    //     scores.entry(team_1_name)
+    //     .and_modify(|team| Team {
+    //         name: team.name,
+    //         goals_scored: team.goals_scored+team_1_score,
+    //         goals_conceded: team.goals_conceded+team_2_score,
+    //     })
+    //     .or_insert(Team {
+    //         name: team_1_name,
+    //         goals_scored: team_1_score,
+    //         goals_conceded: team_2_score,
+    //     });
+
+    //     scores.entry(team_1_name)
+    //     .and_modify(|team| Team {
+    //         name: team.name,
+    //         goals_scored: team.goals_scored+team_1_score,
+    //         goals_conceded: team.goals_conceded+team_2_score,
+    //     })
+    //     .or_insert(Team {
+    //         name: team_1_name,
+    //         goals_scored: team_1_score,
+    //         goals_conceded: team_2_score,
+    //     });
+
+    // }
 
     scores
 }
